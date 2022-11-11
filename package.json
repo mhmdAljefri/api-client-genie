@@ -1,5 +1,5 @@
 {
-  "name": "api-client-genie",
+  "name": "@mhmdaljefri/api-client-genie",
   "version": "0.0.1",
   "description": "API client generator magical tool",
   "main": "dist/index.js",

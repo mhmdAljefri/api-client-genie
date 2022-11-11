@@ -45,34 +45,27 @@ module.exports = async () => {
 			}
 		})
 			.then(res => res.json())
-			.then(
-				(
-					/** @type {any} */
-					{ data, ...res }
-				) => {
-					if (typeof res.success === 'boolean' && !res.success) {
-						throw res.errors;
-					}
-
-					const types = convertJsonToTypes({
-						[capitalizedName + 'Response']: {
-							...res,
-							[capitalizedName + 'Data']: data
-						}
-					});
-
-					// add types to namespace/types.ts file
-					apiTypesGen({
-						modelName: capitalizedName,
-						types
-					});
-					// export types to namespace/types.ts file
-					// add function to namespace/modelName.ts file
-					// export function from namespace/modelName.ts
-					// export function from namespace/index.ts
-					// generate typed function for this endpoint
+			.then(res => {
+				if (typeof res.success === 'boolean' && !res.success) {
+					throw res.errors;
 				}
-			)
+
+				const types = convertJsonToTypes({
+					[capitalizedName + 'Response']: res
+				});
+
+				// add types to namespace/types.ts file
+				apiTypesGen({
+					modelName: capitalizedName,
+					types
+				});
+
+				// export types to namespace/types.ts file
+				// add function to namespace/modelName.ts file
+				// export function from namespace/modelName.ts
+				// export function from namespace/index.ts
+				// generate typed function for this endpoint
+			})
 			.catch(error => {
 				if (error?.code === 'ERR_INVALID_URL') {
 					return console.log(
